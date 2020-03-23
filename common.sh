@@ -75,5 +75,38 @@ getPomParentVersion(){
      _getPomVersion $1 1 $debug
 }
 
+#
+# changeVersionToRelease
+#
+changeVersionToRelease(){
+  local workDir=$1
+  local releaseVersion=$2
+  local mavenFile=`which mvn`
+  [ -x "$mavenFile" ] && echo "没有配置maven路径" return exit 2;  
+  cd $workDir
+  if [ -z "$releaseVersion" ]; then
+  	projectVersion=`getPomVersion ./pom.xml`
+  	releaseVersion=`echo $projectVersion|sed 's/-SNAPSHOT//;'`
+  fi
+
+  if [ $projectVersion != $releaseVersion ]; then 
+      $mavenFile -U org.codehaus.mojo:versions-maven-plugin:2.1:set -DremoveSnapshot=true -DprocessAllModules=true -DnewVersion=$releaseVersion versions:use-releases 
+   else
+     $mavenFile -U versions:use-releases
+   fi  
+   
+   for subdir in $(ls .)
+   do
+     #echo "操作 $subdir"
+     if [ "$subdir" != "." -a "$subdir" != ".." ]; then 
+	echo ${subdir}/pom.xml      
+       		
+        [ -f "${subdir}/pom.xml" ] && changeVersionToRelease $subdir $releaseVersion
+        
+     fi
+   done
+    [ $? = 0 ] && echo "执行成功" && exit 0
+    exit 1;
+}
 
 
