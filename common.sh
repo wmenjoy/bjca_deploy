@@ -24,7 +24,7 @@ hasSnapshot(){
      [ $count -gt 0 ] && return 1
      return 0
   fi
-  
+  ## 处理bz2 gz`  
   if [  "$suffix" = "bz2" -o "$suffix" = "gz"  ]; then
      count=`tar -tzf $currentFile|grep "SNAPSHOT.jar"|wc -l`
      [ $count -gt 0 ] && return 1
