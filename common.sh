@@ -30,6 +30,6 @@ hasSnapshot(){
      [ $count -gt 0 ] && return 1
      return 0
   fi
-  echo "不支持的格式$suffix for file: $cuurentFile"
-  return 6
+  # echo "不支持的格式$suffix for file: $cuurentFile"
+  return 0
 }
