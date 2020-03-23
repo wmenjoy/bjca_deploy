@@ -19,7 +19,7 @@ hasSnapshot(){
   ## zip or jar
   if [ "$suffix" = "zip" -o "$suffix" = "jar" -o "$suffix" = "war" ]; then
      local unzipFile=`which unzip`
-     [ ! -x "$unzipFile" ] && echo "不支持zip，jar，war压缩包格式，请安装相关工具" && exit 4
+     [ ! -x "$unzipFile" ] && echo "不支持zip，jar，war压缩包格式，请安装相关工具" && return 4
      local count=`unzip -l $currentFile|grep "SNAPSHOT.jar"|wc -l`
      [ $count -gt 0 ] && return 1
      return 0
@@ -75,6 +75,86 @@ getPomParentVersion(){
      _getPomVersion $1 1 $debug
 }
 
+
+#
+# replaceProperties
+#
+replaceProperties(){
+  local workDir=$1
+  local level=${2:-0}
+  echo "操作 $workDir $level"
+  local result=`echo $level|sed -n 's/[0-9]*//g'`
+  [ ! -z "$result" ] && echo " replaceProperties $@ 参数错误" && return 3;
+  [ ! -d $workDir ] && echo "参数必须存在" && return 1;
+  [ ! -f "$workDir/pom.xml" ] && echo "$workDir/pom.xml 不存在" && return 2
+  local workDir=$(cd $workDir;pwd)
+ 
+  _replaceProperties $workDir/pom.xml  $workDir
+  local result=$?
+  [ ! "$result" = 0 ] && echo "更新properties失败:$workDir/pom.xml, $result" && return 1
+  
+  local cDir=$workDir
+  for (( i=$level; i>0; i-- ))
+  do
+      cDir=$(cd $cDir;cd ..;pwd)
+#      "更新$cDir
+       echo "$cDir ====>"
+       if [ -f "$cDir/pom.xml" ]; then
+          _replaceProperties $cDir/pom.xml  $workDir
+       else
+          echo "$cDir/pom.xml文件不存在"
+        fi
+   done
+ 
+  level=$(($level + 1))
+  for subdir in $(ls $workDir)
+  do
+    # echo "操作 $subdir"
+    subWorkDir=$workDir/${subdir}
+    if [ "$subdir" != "." -a "$subdir" != ".." -a  -f "$subWorkDir/pom.xml" ]; then
+         echo "操作$subWorkDir"
+         replaceProperties $subWorkDir $level
+    fi 
+ done
+}
+
+resetProperties(){
+ local workDir=$1
+  [ ! -d $workDir ] && echo "参数必须存在" && return 1;
+   local workDir=$(cd $workDir;pwd)
+  [ -f "$workDir/pom.properties.xml.bak" ] && rm -rf $workDir/pom.properties.xml.bak 
+  for subdir in $(ls $workDir)
+  do
+    # echo "操作 $subdir"
+    subWorkDir=$workDir/${subdir}
+    if [ "$subdir" != "." -a "$subdir" != ".." -a  -f "$subWorkDir/pom.properties.xml.bak" ]; then
+         echo "操作$subWorkDir"
+         repsetProperties $subWorkDir 
+    fi
+ done
+}
+
+_replaceProperties(){
+	local pomFile=$1
+	[ ! -f "$pomFile" -o ! -d "$2" ] && echo "参数错误$pomFile $2" && return 1;
+	local workDir=${2//\//\\\/}
+	echo "=======> replace for $pomFile:$2=========="
+         localscript=`cat  "$pomFile"| awk 'in_comment&&/-->/{sub(/([^-]|-[^-])*--+>/,"");in_comment=0}in_comment{next} {gsub(/<!--+([^-]|-[^-])*--+>/,"");in_comment=sub(/<!--+.*/,"");print}'|sed '/^[[:space:]]*$/d'|awk ' mode && /<[\\\\/]properties>/ {mode=0; }  { if (mode == 1) {match($1, "<([^>]+)>([^<]+)<[^>]+>", m);if(m[2] ~ /^[0-9a-zA-Z_\-\.]+$/) {{printf "s/\\\\${%s}/%s/g;",m[1], m[2];}}}} /<properties>/{mode=1}'|sed "s/^/sed \'/;s/$/\' < ${workDir}\/pom.xml > ${workDir}\/temple.swap/"`
+        localscript=`echo $localscript|sed '/^[[:blank:]]*$/d'`
+        if  [ ! -z "$localscript" -o -n "$localscript" ]; then 
+            echo $localscript|sh
+            result=$?
+            if [ -f "$2/temple.swap" -a "$result" = 0 ] ; then
+                [ ! -f "$2/pom.properties.xml.bak" ]  mv $2/pom.xml $2/pom.properties.xml.bak 
+                mv $2/temple.swap $2/pom.xml
+            fi
+            [ $result != 0 ] && echo $localscript
+            return $result 
+      else
+          echo "empty properties"
+          return 0;
+       fi
+}
 #
 # changeVersionToRelease
 #
@@ -82,7 +162,7 @@ changeVersionToRelease(){
   local workDir=$1
   local releaseVersion=$2
   local mavenFile=`which mvn`
-  [ -x "$mavenFile" ] && echo "没有配置maven路径" return exit 2;  
+  [ -x "$mavenFile" ] && echo "没有配置maven路径" && return 2;  
   cd $workDir
   if [ -z "$releaseVersion" ]; then
   	projectVersion=`getPomVersion ./pom.xml`
@@ -105,8 +185,7 @@ changeVersionToRelease(){
         
      fi
    done
-    [ $? = 0 ] && echo "执行成功" && exit 0
-    exit 1;
+    [ $? = 0 ] && echo "执行成功" && return 0
+    return 1;
 }
-
 
