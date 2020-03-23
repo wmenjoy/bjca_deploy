@@ -64,7 +64,7 @@ _getPomVersion(){
    local currentFile="${currentDir}/$(basename $file)"
    [ ! -f "$currentFile" ] && return 1;
    [ "$debug" = 1 ]  && echo $mode
-   cat pom.xml|awk -v modeway=$mode -v debug=$debug 'BEGIN {mode=0} /.*/{ if(debug==1){print mode,"=",$0}}  /<plugin>/{mode=3} /<[\\\\/]plugin>/{mode=0} /<parent>/{mode=1} /<[\\\\/]parent>/{mode=0} /<dependency>/{mode=2} /<[\\\\/]dependency>/{mode=0}  /<version>([^<]*)<[\\\\/]version>/ {if(mode==modeway) { match($1, "<version>([^<]*)<[\\\\/]version>",m) }} END {print m[1]}'
+   cat $currentFile|awk -v modeway=$mode -v debug=$debug 'BEGIN {mode=0} /.*/{ if(debug==1){print mode,"=",$0}}  /<plugin>/{mode=3} /<[\\\\/]plugin>/{mode=0} /<parent>/{mode=1} /<[\\\\/]parent>/{mode=0} /<dependency>/{mode=2} /<[\\\\/]dependency>/{mode=0}  /<version>([^<]*)<[\\\\/]version>/ {if(mode==modeway) { match($1, "<version>([^<]*)<[\\\\/]version>",m) }} END {print m[1]}'
 }
 
 #
