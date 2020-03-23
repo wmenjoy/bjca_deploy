@@ -22,3 +22,13 @@
   - 4：相关工具不存在
   - 5：不支持的文件格式
 
+### getPomVersion
+1. usage
+   getPomVersion $pomFile
+2. 说明
+    用于获取pom的版本号，如果没有version，取parent的pom
+3. 返回值
+    1: pom文件不存在
+    0: 成功
+    2: 没有version
+    结果会print 出来
