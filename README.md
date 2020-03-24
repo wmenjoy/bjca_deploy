@@ -10,7 +10,7 @@
 
 ###  hasSnapshot
 1. usage
-   hasSNapshot $target
+   hasSnapshot $target
 2. 说明
    用于检查目录或者压缩包中是否包含SNAPSHOT
    target 可以是个目录或者压缩文件
@@ -32,3 +32,5 @@
    - 0: 成功
    - 2: 没有version
     结果会print 出来
+    
+### replaceProperties
