@@ -32,6 +32,7 @@
    - 0: 成功
    - 2: 没有version
     结果会print 
+4. demo
  ```
   getPomVersion  /hello-demo/pom.xml
  ```
