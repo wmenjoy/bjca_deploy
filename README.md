@@ -34,3 +34,14 @@
     结果会print 出来
     
 ### replaceProperties
+1. usage
+   replaceProperties $workerDir
+2. 说明
+    使用pom里的properties替换dependency里面的version引用，便于versions:release插件操作
+3. 返回值
+   - 0: 成功
+4. demo
+```
+replaceProperties  /hello-demo/
+
+```
