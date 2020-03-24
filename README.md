@@ -31,7 +31,10 @@
    - 1: pom文件不存在
    - 0: 成功
    - 2: 没有version
-    结果会print 出来
+    结果会print 
+ ```
+  getPomVersion  /hello-demo/pom.xml
+ ```
     
 ### replaceProperties
 1. usage
@@ -41,7 +44,6 @@
 3. 返回值
    - 0: 成功
 4. demo
-```
+``` bash
 replaceProperties  /hello-demo/
-
 ```
