@@ -21,6 +21,11 @@
   - 3：文件不存在
   - 4：相关工具不存在
   - 5：不支持的文件格式
+4. example
+``` bash
+  value=$(hasSnapshot /hello-demo/lib/hello-demo.zip)
+  [ $value == 0 ] && echo "zip包不包含snapshot的jar包依赖"
+```
 
 ### getPomVersion
 1. usage
