@@ -65,3 +65,13 @@
 ``` bash
 replaceProperties  /hello-demo/
 ```
+
+# deploy.sh 脚本
+## 说明
+   简单的支持pom，lib，service的部署
+## 例子
+   deploy.sh --type "lib" --env TEST --src $workdir 
+## Usage
+   deploy.sh [-s|--src] $workDir [-e|--env]环境变量 [-t|--type] [lib|serivice|pom] 
+
+
