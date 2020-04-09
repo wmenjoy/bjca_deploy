@@ -1,5 +1,48 @@
 #!/bin/bash
 
+##
+## relace all SNAPSHOT properties of a pom or a project to specific  value
+##
+replaceSnapshot(){
+  local file=$1
+  local to_value=${2:-TEST}
+  
+  [ ! -f "$file" -a ! -d "$file" ] && echo "$file not exitst Usage: replaceSnapshot $file $to_value" && return -1
+  
+   
+   if [ -f "$file" ]; then
+      to=$to_value"-SNAPSHOT"
+      gsed "s#<version>\([^<]*\)-SNAPSHOT</version>#<version>\\1-$to</version>#g" $file
+   else 
+      [ -f "$file/pom.xml" ] && replaceSnapshot $file/pom.xml $to_value
+      
+      for subdir in $(ls $file);
+      do
+         local subWorkDir=$file/$subdir
+	 if [ "$subdir" != "." -a "$subdir" != ".." -a  -f "$subWorkDir/pom.xml" ]; then
+		 replaceSnapshot $subWorkDir $to_value
+		 result=$?
+                 [ "$result" != 0 ] && return $result
+	 fi
+      done
+  
+    fi
+    return 0   
+}
+
+gsed(){
+ 
+# Default case for Linux sed, just use "-i"
+sedi=(-i)
+case "$(uname)" in
+  # For macOS, use two parameters
+  Darwin*) sedi=(-i "")
+esac
+
+# Expand the parameters in the actual call to "sed"
+sed "${sedi[@]}" -e  "$1" $2
+}
+
 
 ##
 ## check if the snapshot files exsits in a directory or a zip compressed file

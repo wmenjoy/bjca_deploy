@@ -7,6 +7,18 @@
 ```
 
 ## 函数
+### replaceSnapshot
+1. usage
+   replaceSnapshot $target $to_value
+2. 说明
+   用于替换pom的version
+   $target可以是具体的pom文件，也可以是包含有pom的目录，可以自动替换子目录
+   $to_value 表示要增加的值，比如to_value=test 那么 SNAPSHOT最后替换为test-SNAPSHOT
+3. 返回值
+   - 0: 表示成功
+   - -1: 表示文件不存在
+4. example
+   replaceSnapshot  /home/var/project TEST
 
 ###  hasSnapshot
 1. usage
