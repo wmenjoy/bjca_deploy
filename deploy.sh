@@ -78,7 +78,7 @@ else
    fi
    ## 修改版本
    if [ $projectVersion != $version ]; then 
-      $MVN  -U versions:set -DremoveSnapshot=true -DprocessAllModules=true -DnewVersion=$releaseVersion versions:use-releases   else
+     $MVN  -U versions:set -DremoveSnapshot=true -DprocessAllModules=true -DnewVersion=$releaseVersion versions:use-releases   else
      $MVN -U versions:use-releases
    fi  
    
@@ -86,16 +86,17 @@ else
    $MVN enforcer:enforce -Drules=requireReleaseVersion   
 fi
 
+## pom 需要发版
 if [ "$type" == "pom" ]; then
-   $MVN -U  deploy
+   $MVN -U  deploy || (echo "发布pom失败，请检查" && exit 1)
 elif  [ "$type" == "pom" ]; then
    if [ -z "$module" ]; then
-      $MVN -U deploy
+      $MVN -U deploy || (echo "发布jar失败，请检查" && exit 1)
    else 
       # 需要考虑重复编译某个模块的问题
-      $MVN -U deploy -pl $module -am
+      $MVN -U deploy -pl $module -am || (echo "发布jar失败，请检查" && exit 1)
    fi
 else 
-   $MVN -U package
+   $MVN -U package || (echo "发布service失败失败，请检查" && exit 1)
 fi
 
