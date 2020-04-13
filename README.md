@@ -2,7 +2,7 @@
 
 ## 使用说明
 1. 引入函数
-```
+```bash
 . common.sh
 ```
 
@@ -18,8 +18,8 @@
    - 0: 表示成功
    - -1: 表示文件不存在
 4. example
-```   
-比如替换SNAPSHOT为 TEST-SNAPSHOT
+``` bash
+#比如替换SNAPSHOT为 TEST-SNAPSHOT
 replaceSnapshot  /home/var/project TEST
 ```
 ###  hasSnapshot
@@ -52,7 +52,7 @@ replaceSnapshot  /home/var/project TEST
    - 2: 没有version
     结果会print 
 4. demo
- ```
+ ```bash
   getPomVersion  /hello-demo/pom.xml
  ```
     
