@@ -3,6 +3,7 @@
 ## 使用说明
 1. 引入函数
 ```bash
+## 函数生效的方法
 . common.sh
 ```
 
@@ -76,9 +77,9 @@ replaceProperties  /hello-demo/
 ## 例子
 ```bash
 # 发布指定目录下，所有的jar包以及pom
-   deploy.sh --type "lib"  --env TEST --src $workdir 
+deploy.sh --type "lib"  --env TEST --src $workdir 
 # 发布lib下指定module test的jar包
- deploy.sh --type "lib" --module test --env TEST --src $workdir 
+deploy.sh --type "lib" --module test --env TEST --src $workdir 
 # 发布pom文件
 deploy.sh --type pom --env TEST --src $workdir 
 # 发布service，只是打包
