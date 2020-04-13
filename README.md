@@ -18,8 +18,10 @@
    - 0: 表示成功
    - -1: 表示文件不存在
 4. example
-   replaceSnapshot  /home/var/project TEST
-
+```   
+比如替换SNAPSHOT为 TEST-SNAPSHOT
+replaceSnapshot  /home/var/project TEST
+```
 ###  hasSnapshot
 1. usage
    hasSnapshot $target
