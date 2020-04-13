@@ -69,11 +69,21 @@ replaceProperties  /hello-demo/
 ```
 
 # deploy.sh 脚本
+## Usage
+   deploy.sh [-s|--src] $workDir [-e|--env]环境变量 [-t|--type] [lib|serivice|pom] 
 ## 说明
    简单的支持pom，lib，service的部署
 ## 例子
-   deploy.sh --type "lib" --env TEST --src $workdir 
-## Usage
-   deploy.sh [-s|--src] $workDir [-e|--env]环境变量 [-t|--type] [lib|serivice|pom] 
+```bash
+# 发布指定目录下，所有的jar包以及pom
+   deploy.sh --type "lib"  --env TEST --src $workdir 
+# 发布lib下指定module test的jar包
+ deploy.sh --type "lib" --module test --env TEST --src $workdir 
+# 发布pom文件
+deploy.sh --type pom --env TEST --src $workdir 
+# 发布service，只是打包
+deploy.sh --type service --env TEST --src $workdir 
+
+```
 
 
