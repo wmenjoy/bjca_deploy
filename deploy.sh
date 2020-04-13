@@ -83,19 +83,19 @@ else
    fi  
    
    ## 检查release
-   mvn enforcer:enforce -Drules=requireReleaseVersion   
+   $MVN enforcer:enforce -Drules=requireReleaseVersion   
 fi
 
 if [ "$type" == "pom" ]; then
-   mvn -U  deploy
+   $MVN -U  deploy
 elif  [ "$type" == "pom" ]; then
    if [ -z "$module" ]; then
-      mvn -U deploy
+      $MVN -U deploy
    else 
       # 需要考虑重复编译某个模块的问题
-      mvn -U deploy -pl $module -am
+      $MVN -U deploy -pl $module -am
    fi
 else 
-   mvn -U package
+   $MVN -U package
 fi
 
