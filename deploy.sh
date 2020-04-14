@@ -62,7 +62,7 @@ fi
 [ ! -d "$src" -o ! -f "$src/pom.xml" ] && echo "src请指向源代码地址" && exit 1
 
 type=${type:-service}
-[ ! "$type" = "service" -a ! "type" = "lib" -a ! "type" = "pom" ] && echo "type 参数必须是service, lib, pom三种" && exit 1
+[ ! "$type" = "service" -a ! "$type" = "lib" -a ! "$type" = "pom" ] && echo "type 参数必须是service, lib, pom三种" && exit 1
 
 env=${env:-TEST}
 
