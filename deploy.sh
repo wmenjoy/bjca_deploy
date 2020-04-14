@@ -89,7 +89,7 @@ fi
 ## pom 需要发版
 if [ "$type" == "pom" ]; then
    $MVN -U  deploy || (echo "发布pom失败，请检查" && exit 1)
-elif  [ "$type" == "pom" ]; then
+elif  [ "$type" == "lib" ]; then
    if [ -z "$module" ]; then
       $MVN -U deploy || (echo "发布jar失败，请检查" && exit 1)
    else 
