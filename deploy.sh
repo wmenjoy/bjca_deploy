@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ARGS=`getopt -o s:e:t:v:m --long src:,env:,type:, module:,version:,  -n 'deploy.sh' -- "$@"`
+ARGS=`getopt -o s:e:t:v:m --long src:,env:,type:,module:,version:, -n 'deploy.sh' -- "$@"`
 
 MVN=`which mvn`
 
@@ -35,7 +35,7 @@ do
 	type=$2
 	shift 2
 	;;
-       -m|module)
+       -m|--module)
 	module=$2
 	shift 2
 	;;
