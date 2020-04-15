@@ -73,7 +73,7 @@ replaceProperties  /hello-demo/
 ## Usage
    deploy.sh [-s|--src] $workDir [-e|--env]环境变量 [-t|--type] [lib|serivice|pom] 
 ## 说明
-   简单的支持pom，lib，service的部署
+   简单的支持pom，lib，service的编译以及发版本到maven仓库
 ## 例子
 ```bash
 # 发布指定目录下，所有的jar包以及pom
